@@ -11,20 +11,30 @@ from bs4 import BeautifulSoup
 #####################
 
 ## PART 1 (100 points) - Get the HTML data from http://www.nytimes.com (the New York Times home page) and save it in a file called nytimes_data.html.
+
+## Write the Python code to do so here.
 nytimes_data = requests.get("https://www.nytimes.com").text
 fileref = open("nytimes_data.html", "w")
 fileref.write(nytimes_data)
 fileref.close
 
-## Write the Python code to do so here.
-
-
-
+f = open("nytimes_data.html", "r")
 
 #####################
 
 ## PART 2 (200 points)
 ## Write code to get the first 10 headlines from the New York Times, based on the data you saved in the file in Part 1, and save those strings in a list called nytimes_headlines. 
+soup = BeautifulSoup(f.read(), 'html.parser')
+nytimes_headlines = []
+for story_heading in soup.find_all(class_="story-heading"):
+	if story_heading.a:
+		nytimes_headlines.append(story_heading.a.text.replace("\n", " ").strip())
+	else:
+		nytimes_headlines.append(story_heading.contents[0].strip())
+
+for num in range(10):
+	print (nytimes_headlines[num])
+
 
 ## Note that you will almost certainly need to do some investigation on the http://nytimes.com website to do this correctly, even after saving the file in Part 1.
 
@@ -72,6 +82,12 @@ htmldoc = response.text
 soup = BeautifulSoup(htmldoc,"html.parser")
 people = soup.find_all("div",{"class":"views-row"})
 umsi_titles = {}
+name = soup.find("div", {"property":"dc: title"})
+title = soup.find_all("div", {"class": "field-item even"})
+print (type(people))
+for person in people:
+	print (person.find("div", {"property":"dc: title"}))
+
 
 ## It may be helpful to translate the following from English to code:
 
