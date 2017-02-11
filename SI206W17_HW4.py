@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup
 nytimes_data = requests.get("https://www.nytimes.com").text
 fileref = open("nytimes_data.html", "w")
 fileref.write(nytimes_data)
-fileref.close
+fileref.close()
 
 f = open("nytimes_data.html", "r")
 
@@ -32,8 +32,9 @@ for story_heading in soup.find_all(class_="story-heading"):
 	else:
 		nytimes_headlines.append(story_heading.contents[0].strip())
 
-for num in range(10):
-	print (nytimes_headlines[num])
+nytimes_headlines = nytimes_headlines[:10]
+for headline in nytimes_headlines:
+	print (headline)
 
 
 ## Note that you will almost certainly need to do some investigation on the http://nytimes.com website to do this correctly, even after saving the file in Part 1.
@@ -82,11 +83,9 @@ htmldoc = response.text
 soup = BeautifulSoup(htmldoc,"html.parser")
 people = soup.find_all("div",{"class":"views-row"})
 umsi_titles = {}
-name = soup.find("div", {"property":"dc: title"})
-title = soup.find_all("div", {"class": "field-item even"})
-print (type(people))
+
 for person in people:
-	print (person.find("div", {"property":"dc: title"}))
+	umsi_titles[person.find("div", {"property":"dc:title"}).h2.text] = person.find("div", {"class": "field field-name-field-person-titles field-type-text field-label-hidden"}).find("div", {"class": "field-item even"}).text
 
 
 ## It may be helpful to translate the following from English to code:
